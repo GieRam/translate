@@ -13,6 +13,7 @@ import (
 	"os"
 	"log"
 	"fmt"
+	"net/url"
 	"strings"
 	"sort"
 	"strconv"
@@ -44,12 +45,11 @@ type TranslationResponse struct {
 func translate(key string, phrase string, source string, target string) (translation string, err error) {
 	res := TranslationResponse{}
 
-	p := napping.Params{
-		"key": key,
-		"q": phrase,
-		"source": source,
-		"target": target,
-	}
+	p := url.Values{}
+	p.Add("key", key)
+	p.Add("q", phrase)
+	p.Add("source", source)
+	p.Add("target", target)
 
 	resp, err := napping.Get(apiUrl, &p, &res, nil)
 	if err != nil {
